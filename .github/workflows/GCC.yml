@@ -87,18 +87,18 @@ jobs:
     - name: get-test-coverage
       run: |
         cd $GITHUB_WORKSPACE/build
-        gcovr -r .. -v  --html-details  --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html
+        gcovr -r .. -v  --html-details  --exclude ${GITHUB_WORKSPACE}/fv3atm/tests --exclude CMakeFiles --print-summary -o test-coverage.html
 
     - name: upload-test-coverage
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: test-coverage
+        name: test-coverage-fv3atm
         path: |
               build/*.html 
               build/*.css
 
     - name: debug-artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
         name: ccpp_prebuild_logs
