@@ -26,6 +26,10 @@ jobs:
 
     steps:
 
+    - name: apt-install
+      run: |
+        sudo apt install gcovr
+
     - name: checkout-fv3atm
       uses: actions/checkout@v3
       with:
