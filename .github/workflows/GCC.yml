@@ -79,7 +79,12 @@ jobs:
         cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }} -DCMAKE_Fortran_FLAGS="-fprofile-abs-path -fprofile-arcs -ftest-coverage -O0"
         make -j2
 
-    - name: test-coverage
+    - name: run-tests
+      run: |
+        cd $GITHUB_WORKSPACE/build
+        ctest -j2 --output-on-failure --rerun-failed
+
+    - name: get-test-coverage
       run: |
         cd $GITHUB_WORKSPACE/build
         gcovr -r .. -v  --html-details  --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html
