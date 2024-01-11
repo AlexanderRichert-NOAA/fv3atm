@@ -72,8 +72,21 @@ jobs:
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
         mkdir ${GITHUB_WORKSPACE}/build
         cd ${GITHUB_WORKSPACE}/build
-        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }}
+        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }} -DCMAKE_Fortran_FLAGS="-fprofile-abs-path -fprofile-arcs -ftest-coverage -O0"
         make -j2
+
+    - name: test-coverage
+      run: |
+        cd $GITHUB_WORKSPACE/build
+        gcovr -r .. -v  --html-details  --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html
+
+    - name: upload-test-coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-coverage
+        path: |
+              build/*.html 
+              build/*.css
 
     - name: debug-artifacts
       uses: actions/upload-artifact@v3
