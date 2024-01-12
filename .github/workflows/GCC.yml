@@ -87,7 +87,8 @@ jobs:
     - name: get-test-coverage
       run: |
         cd $GITHUB_WORKSPACE/build
-        gcovr -r .. -v  --html-details  --exclude ${GITHUB_WORKSPACE}/fv3atm/tests --exclude CMakeFiles --print-summary -o test-coverage.html
+        f=${GITHUB_WORKSPACE}/fv3atm
+        gcovr -r $f -v --html-details --exclude ${f}/tests --exclude $f/stochastic_physics_repo --exclude $f/ccpp/physics --exclude $f/ccpp/framework --exclude $f/atmos_cubed_sphere  --exclude CMakeFiles --print-summary -o test-coverage.html
 
     - name: upload-test-coverage
       uses: actions/upload-artifact@v4
