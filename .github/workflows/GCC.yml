@@ -70,9 +70,9 @@ jobs:
         cd ${GITHUB_WORKSPACE}/fv3atm
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
-        mkdir ${GITHUB_WORKSPACE}/build
-        cd ${GITHUB_WORKSPACE}/build
-        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }} -DCMAKE_Fortran_FLAGS="-fprofile-abs-path -fprofile-arcs -ftest-coverage -O0"
+        mkdir ${GITHUB_WORKSPACE}/fv3atm/build
+        cd ${GITHUB_WORKSPACE}/fv3atm/build
+        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }}
         make -j2
 
     - name: run-tests
@@ -85,4 +85,4 @@ jobs:
       if: ${{ failure() }}
       with:
         name: ccpp_prebuild_logs
-        path: ${{ github.workspace }}/build/ccpp/ccpp_prebuild.*
+        path: ${{ github.workspace }}/fv3atm/build/ccpp/ccpp_prebuild.*

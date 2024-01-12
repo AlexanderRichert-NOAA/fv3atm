@@ -81,7 +81,7 @@ jobs:
       run: |
         f=${GITHUB_WORKSPACE}/fv3atm
         cd $f/build
-        gcovr -r .. -v --html-details --exclude ${f}/tests --exclude $f/stochastic_physics_repo --exclude $f/ccpp/physics --exclude $f/ccpp/framework --exclude $f/atmos_cubed_sphere  --exclude CMakeFiles --print-summary -o test-coverage.html
+        gcovr -r .. -v --html-details --exclude ${f}/tests --exclude $f/stochastic_physics_repo --exclude $f/build/ccpp --exclude $f/ccpp/physics --exclude $f/ccpp/framework --exclude $f/atmos_cubed_sphere  --exclude CMakeFiles --print-summary -o test-coverage.html
 
     - name: upload-test-coverage
       uses: actions/upload-artifact@v4
