@@ -10,19 +10,19 @@ execute_process(COMMAND cmake -E create_symlink
 
 function(add_fv3atm_mpi_test TESTNAME)
   add_executable(${TESTNAME} ${TESTNAME}.F90)
-  target_link_libraries(${TESTNAME} PRIVATE fv3atm MPI::MPI_Fortran PIO::PIO_Fortran)
-  add_test(${TESTNAME} ${MPIEXEC_EXECUTABLE} -n 2 ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME})
+  target_link_libraries(${TESTNAME} PRIVATE fv3atm MPI::MPI_Fortran ESMF)
+  add_test(${TESTNAME} ${MPIEXEC_EXECUTABLE} -n 4 ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME})
 endfunction()
 
 function(add_fv3atm_serial_test TESTNAME)
   add_executable(${TESTNAME} ${TESTNAME}.F90)
-  target_link_libraries(${TESTNAME} PRIVATE fv3atm)
+  target_link_libraries(${TESTNAME} PRIVATE fv3atm ESMF)
   add_test(${TESTNAME} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME})
 endfunction()
 
-#foreach(testname test_write_netcdf)
-#  add_fv3atm_mpi_test(${testname})
-#endforeach()
+foreach(testname test_write_netcdfB)
+  add_fv3atm_mpi_test(${testname})
+endforeach()
 
 foreach(testname test_post_nems_routines)
   add_fv3atm_serial_test(${testname})
