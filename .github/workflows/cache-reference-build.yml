@@ -27,10 +27,8 @@ jobs:
         spack env activate gcc12
         spack load $(spack find --format "{name}")
         printenv | grep -E "(PATH|CMAKE_PREFIX_PATH)=" >> $GITHUB_ENV
-        cd ${GITHUB_WORKSPACE}/codedir
-        git clone https://github.com/NOAA-EMC/CMakeModules
-        git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
-        echo "we are here"
+        git clone https://github.com/NOAA-EMC/CMakeModules codedir/CMakeModules
+        git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics codedir/stochastic_physics_repo
         cmake -S codedir -B build -D32BIT=ON || true
         cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.{out,err}
 
