@@ -18,7 +18,7 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: ${{ github.workspace }}/spack-develop
-        key: spack-${{ hashFiles('codedir/ci/spack.yaml') }}-gcc${{ matrix.gcc_ver }}-mpich
+        key: spack-${{ hashFiles('codedir/ci/spack.yaml') }}-gcc12-mpich
 
     - name: setup
       shell: bash
