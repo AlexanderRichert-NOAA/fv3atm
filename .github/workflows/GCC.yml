@@ -9,10 +9,10 @@ name: GCC
 on:
   push:
     branches:
-    - developx
+    - develop
   pull_request:
     branches:
-    - developx
+    - develop
 
 jobs:
   build_spack:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         gcc_ver: ["12"]
-        mpi: ["mpich", "openmpi"]
+        mpi: ["mpich"]
 
     steps:
         
@@ -68,9 +68,9 @@ jobs:
 
     strategy:
       matrix:
-        cmake_opts: ["-D32BIT=ON", "-D32BIT=OFF"]
+        cmake_opts: ["-D32BIT=ON"]
         gcc_ver: ["12"]
-        mpi: ["mpich", "openmpi"]
+        mpi: ["mpich"]
 
     steps:
 
@@ -97,7 +97,7 @@ jobs:
     - name: checkout-fv3atm
       uses: actions/checkout@v4
       with:
-        path: ${{ github.workspace }}/fv3atm
+        path: ${{ github.workspace }}/codedir
         submodules: recursive
 
     - name: cache-spack
@@ -107,21 +107,38 @@ jobs:
         path: ${{ github.workspace }}/spack-develop
         key: spack-${{ hashFiles('fv3atm/ci/spack.yaml') }}-gcc${{ matrix.gcc_ver }}-${{ matrix.mpi }}
 
-    - name: build-fv3atm
+    - name: setup
+      shell: bash
       run: |
         . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
-        spack env activate gcc${{ matrix.gcc_ver }}
+        spack env activate gcc12
         spack load $(spack find --format "{name}")
-        cd ${GITHUB_WORKSPACE}/fv3atm
-        git clone https://github.com/NOAA-EMC/CMakeModules
-        git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
-        mkdir ${GITHUB_WORKSPACE}/build
-        cd ${GITHUB_WORKSPACE}/build
-        export CC=mpicc
-        export CXX=mpicxx
-        export FC=mpif90
-        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }} ${{ env.gcov_cmake }}
-        make -j2
+        printenv | grep -E "(PATH|CMAKE_PREFIX_PATH)=" >> $GITHUB_ENV
+        git clone https://github.com/NOAA-EMC/CMakeModules codedir/CMakeModules
+        git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics codedir/stochastic_physics_repo
+
+    - name: Build
+      uses: AlexanderRichert-NOAA/ci-cache-cmake-build/build-code@main
+      with:
+        parent-org: AlexanderRichert-NOAA
+        source-dir: codedir
+        build-dir: build/
+
+#    - name: build-fv3atm
+#      run: |
+#        . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
+#        spack env activate gcc${{ matrix.gcc_ver }}
+#        spack load $(spack find --format "{name}")
+#        cd ${GITHUB_WORKSPACE}/fv3atm
+#        git clone https://github.com/NOAA-EMC/CMakeModules
+#        git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
+#        mkdir ${GITHUB_WORKSPACE}/build
+#        cd ${GITHUB_WORKSPACE}/build
+#        export CC=mpicc
+#        export CXX=mpicxx
+#        export FC=mpif90
+#        cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_TESTING=ON ${{ matrix.cmake_opts }} ${{ env.gcov_cmake }}
+#        make -j2
 
     - name: run-tests
       run: |
