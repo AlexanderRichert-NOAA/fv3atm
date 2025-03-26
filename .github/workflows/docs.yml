@@ -8,10 +8,10 @@ name: docs
 on:
   push:
     branches:
-    - develop
+    - developx
   pull_request:
     branches:
-    - develop
+    - developx
 
 jobs:
   build_spack:
