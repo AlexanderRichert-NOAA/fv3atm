@@ -26,7 +26,7 @@ jobs:
         . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
         spack env activate gcc12
         spack load $(spack find --format "{name}")
-        printenv | grep -E "^[A-Z]" >> $GITHUB_ENV
+        printenv | grep -E "^[A-Z]" | grep -F '=' >> $GITHUB_ENV
         cd ${GITHUB_WORKSPACE}/codedir
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
