@@ -31,10 +31,12 @@ jobs:
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
         echo "we are here"
+        cmake -S codedir -B build -D32BIT=ON || true
+        cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.{out,err}
 
-    - name: Generate reference build
-      uses: AlexanderRichert-NOAA/ci-cache-cmake-build/cache-reference-build@main
-      with:
-        source-dir: codedir
-        build-dir: build
-        config-args: -D32BIT=ON
+#    - name: Generate reference build
+#      uses: AlexanderRichert-NOAA/ci-cache-cmake-build/cache-reference-build@main
+#      with:
+#        source-dir: codedir
+#        build-dir: build
+#        config-args: -D32BIT=ON
