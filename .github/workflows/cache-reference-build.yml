@@ -35,7 +35,14 @@ jobs:
       shell: bash
       if: always()
       run: |
-        cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.{out,err}
+        echo ccpp
+        cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.*
+        echo cache
+        cat /home/runner/work/fv3atm/fv3atm/build/CMakeCache.txt
+        echo source dirs
+        find /home/runner/work/fv3atm/fv3atm/codedir -maxdepth 3
+        echo build dirs
+        find /home/runner/work/fv3atm/fv3atm/build -maxdepth 3
 
 #    - name: Generate reference build
 #      uses: AlexanderRichert-NOAA/ci-cache-cmake-build/cache-reference-build@main
