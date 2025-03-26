@@ -30,6 +30,11 @@ jobs:
         git clone https://github.com/NOAA-EMC/CMakeModules codedir/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics codedir/stochastic_physics_repo
         cmake -S codedir -B build -D32BIT=ON || true
+
+    - name: debug
+      shell: bash
+      if: always()
+      run: |
         cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.{out,err}
 
 #    - name: Generate reference build
