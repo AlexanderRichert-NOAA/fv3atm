@@ -10,9 +10,11 @@ on:
   push:
     branches:
     - develop
+    - testbranch
   pull_request:
     branches:
     - develop
+    - testbranch
 
 jobs:
   build_spack:
