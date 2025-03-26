@@ -30,6 +30,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/codedir
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
+        echo "we are here"
 
     - name: Generate reference build
       uses: AlexanderRichert-NOAA/ci-cache-cmake-build/cache-reference-build@main
