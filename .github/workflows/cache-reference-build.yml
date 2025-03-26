@@ -32,7 +32,7 @@ jobs:
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics codedir/stochastic_physics_repo
         curl -f -s -S -R -L https://github.com/Kitware/CMake/releases/download/v3.29.2/cmake-3.29.2-Linux-x86_64.tar.gz | tar -zx
         export PATH=${{ github.workspace }}/cmake-3.29.2-linux-x86_64/bin:$PATH
-        cmake -S codedir -B build -D32BIT=ON -DCMAKE_Fortran_FLAGS="-O3"
+        cmake -S codedir -B build -D32BIT=ON -DCMAKE_Fortran_FLAGS="-O3" -DBUILD_TESTING=ON
 
 #    - name: debug
 #      shell: bash
