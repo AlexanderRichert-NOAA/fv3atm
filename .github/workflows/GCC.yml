@@ -125,6 +125,7 @@ jobs:
         parent-org: AlexanderRichert-NOAA
         source-dir: codedir
         build-dir: build/
+        config-args: -D32BIT=ON -DCMAKE_Fortran_FLAGS="-O3" -DBUILD_TESTING=ON
 
 #    - name: build-fv3atm
 #      run: |
