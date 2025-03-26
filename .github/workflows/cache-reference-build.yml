@@ -30,20 +30,22 @@ jobs:
         printenv | grep -E "(PATH|CMAKE_PREFIX_PATH)=" >> $GITHUB_ENV
         git clone https://github.com/NOAA-EMC/CMakeModules codedir/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics codedir/stochastic_physics_repo
-        cmake -S codedir -B build -D32BIT=ON || true
+        curl -f -s -S -R -L https://github.com/Kitware/CMake/releases/download/v3.29.2/cmake-3.29.2-Linux-x86_64.tar.gz | tar -zx
+        export PATH=${{ github.workspace }}/cmake-3.29.2-linux-x86_64/bin:$PATH
+        cmake -S codedir -B build -D32BIT=ON
 
-    - name: debug
-      shell: bash
-      if: always()
-      run: |
-        echo ccpp
-        cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.*
-        echo cache
-        cat /home/runner/work/fv3atm/fv3atm/build/CMakeCache.txt
-        echo source dirs
-        find /home/runner/work/fv3atm/fv3atm/codedir -maxdepth 3
-        echo build dirs
-        find /home/runner/work/fv3atm/fv3atm/build -maxdepth 3
+#    - name: debug
+#      shell: bash
+#      if: always()
+#      run: |
+#        echo ccpp
+#        cat /home/runner/work/fv3atm/fv3atm/build/ccpp/ccpp_prebuild.*
+#        echo cache
+#        cat /home/runner/work/fv3atm/fv3atm/build/CMakeCache.txt
+#        echo source dirs
+#        find /home/runner/work/fv3atm/fv3atm/codedir -maxdepth 3
+#        echo build dirs
+#        find /home/runner/work/fv3atm/fv3atm/build -maxdepth 3
 
 #    - name: Generate reference build
 #      uses: AlexanderRichert-NOAA/ci-cache-cmake-build/cache-reference-build@main
