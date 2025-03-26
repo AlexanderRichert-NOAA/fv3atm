@@ -24,7 +24,7 @@ jobs:
       shell: bash
       run: |
         . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
-        spack env activate gcc${{ matrix.gcc_ver }}
+        spack env activate gcc12
         spack load $(spack find --format "{name}")
         env >> $GITHUB_ENV
         cd ${GITHUB_WORKSPACE}/codedir
