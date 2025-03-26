@@ -30,7 +30,7 @@ jobs:
     - name: checkout-fv3atm
       uses: actions/checkout@v4
       with:
-        path: ${{ github.workspace }}/fv3atm
+        path: ${{ github.workspace }}/codedir
         submodules: recursive
 
     - name: install-cmake
