@@ -102,7 +102,6 @@ if(MOVING_NEST)
 
   list(APPEND moving_nest_srcs
     moving_nest/bounding_box.F90
-    moving_nest/fv_tracker.F90
     moving_nest/fv_moving_nest.F90
     moving_nest/fv_moving_nest_main.F90
     moving_nest/fv_moving_nest_physics.F90
@@ -123,7 +122,7 @@ add_library(fv3atm
   cpl/module_cplfields.F90
   cpl/module_cap_cpl.F90
   cpl/module_cplscalars.F90
-  io/fv3atm_common_io.F90
+  io/fv3atm_common_io_mv.F90
   io/fv3atm_clm_lake_io.F90
   io/fv3atm_rrfs_sd_io.F90
   io/fv3atm_sfc_io.F90
