@@ -123,7 +123,6 @@ add_library(fv3atm
   cpl/module_cap_cpl.F90
   cpl/module_cplscalars.F90
   io/fv3atm_common_io_mv.F90
-  io/fv3atm_clm_lake_io.F90
   io/fv3atm_rrfs_sd_io.F90
   io/fv3atm_sfc_io.F90
   io/fv3atm_oro_io.F90
