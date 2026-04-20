@@ -83,9 +83,11 @@ jobs:
           echo 'devbuild=OFF' | tee -a ${GITHUB_ENV}
         fi
 
-    - name: install-utilities
+    - name: install-deps
       run: |
-        sudo apt-get install doxygen graphviz
+        if [ ${{ matrix.mpi }} == mpich ]; then mpi_pkgs="mpich libmpich-dev"; fi
+        if [ ${{ matrix.mpi }} == openmpi ]; then mpi_pkgs="openmpi-bin libopenmpi-dev"; fi
+        sudo apt-get install doxygen graphviz $mpi_pkgs
 
     - name: install-cmake
       run: |
@@ -111,6 +113,12 @@ jobs:
         . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
         spack env activate gcc${{ matrix.gcc_ver }}
         spack load $(spack find --format "{name}")
+        echo "some debug stuff:"
+        echo "which mpicc: " $(which mpicc)
+        echo "which spack: " $(which spack)
+        echo "spack find mpich::"
+        spack find mpich
+        echo "^ end debug stuff"
         cd ${GITHUB_WORKSPACE}/fv3atm
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
