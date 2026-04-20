@@ -33,7 +33,7 @@ jobs:
       run: |
         if [ ${{ matrix.mpi }} == mpich ]; then mpi_pkgs="mpich libmpich-dev"; fi
         if [ ${{ matrix.mpi }} == openmpi ]; then mpi_pkgs="openmpi-bin libopenmpi-dev"; fi
-        sudo apt-get install doxygen graphviz python cmake make $mpi_pkgs
+        sudo apt-get install doxygen graphviz python3 cmake make $mpi_pkgs
 
     - name: install-cmake
       run: |
