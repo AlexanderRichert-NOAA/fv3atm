@@ -29,6 +29,12 @@ jobs:
         path: ${{ github.workspace }}/fv3atm
         submodules: recursive
 
+    - name: install-deps
+      run: |
+        if [ ${{ matrix.mpi }} == mpich ]; then mpi_pkgs="mpich libmpich-dev"; fi
+        if [ ${{ matrix.mpi }} == openmpi ]; then mpi_pkgs="openmpi-bin libopenmpi-dev"; fi
+        sudo apt-get install doxygen graphviz $mpi_pkgs
+
     - name: install-cmake
       run: |
         cd ${{ github.workspace }}
