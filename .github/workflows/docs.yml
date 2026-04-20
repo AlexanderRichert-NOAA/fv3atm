@@ -7,10 +7,11 @@
 name: docs
 on:
   push:
+    branches:
+    - develop
   pull_request:
     branches:
     - develop
-  workflow_dispatch:
 
 jobs:
   build_spack:
@@ -19,21 +20,15 @@ jobs:
     strategy:
       matrix:
         gcc_ver: ["12"]
-        mpi: ["openmpi"]
+        mpi: ["mpich"]
 
     steps:
-        
+
     - name: checkout-fv3atm
       uses: actions/checkout@v4
       with:
         path: ${{ github.workspace }}/fv3atm
         submodules: recursive
-
-    - name: install-deps
-      run: |
-        if [ ${{ matrix.mpi }} == mpich ]; then mpi_pkgs="mpich libmpich-dev"; fi
-        if [ ${{ matrix.mpi }} == openmpi ]; then mpi_pkgs="openmpi-bin libopenmpi-dev"; fi
-        sudo apt-get install doxygen graphviz python3 cmake make $mpi_pkgs
 
     - name: install-cmake
       run: |
@@ -58,7 +53,7 @@ jobs:
         spack env create gcc${{ matrix.gcc_ver }} ${GITHUB_WORKSPACE}/fv3atm/ci/spack.yaml
         spack env activate gcc${{ matrix.gcc_ver }}
         spack compiler find | grep gcc@${{ matrix.gcc_ver }}
-        spack external find --not-buildable gmake cmake git git-lfs perl python ${{ matrix.mpi }}
+        spack external find gmake cmake git git-lfs perl python ${{ matrix.mpi }}
         spack config add "packages:all:require:['%gcc@${{ matrix.gcc_ver }}']"
         spack config add "packages:mpi:require:'${{ matrix.mpi }}'"
         spack concretize |& tee ${SPACK_ENV}/log.concretize
@@ -88,11 +83,9 @@ jobs:
           echo 'devbuild=OFF' | tee -a ${GITHUB_ENV}
         fi
 
-    - name: install-deps
+    - name: install-utilities
       run: |
-        if [ ${{ matrix.mpi }} == mpich ]; then mpi_pkgs="mpich libmpich-dev"; fi
-        if [ ${{ matrix.mpi }} == openmpi ]; then mpi_pkgs="openmpi-bin libopenmpi-dev"; fi
-        sudo apt-get install doxygen graphviz $mpi_pkgs
+        sudo apt-get install doxygen graphviz
 
     - name: install-cmake
       run: |
@@ -116,22 +109,14 @@ jobs:
     - name: docs-build
       run: |
         . ${GITHUB_WORKSPACE}/spack-develop/share/spack/setup-env.sh
+        sudo apt install mpich
         spack env activate gcc${{ matrix.gcc_ver }}
         spack load $(spack find --format "{name}")
-        echo "some debug stuff:"
-        echo "which mpicc: " $(which mpicc)
-        echo "which spack: " $(which spack)
-        echo "spack find mpich::"
-        spack find mpich
-        echo "^ end debug stuff"
         cd ${GITHUB_WORKSPACE}/fv3atm
         git clone https://github.com/NOAA-EMC/CMakeModules
         git clone --recurse-submodules https://github.com/NOAA-PSL/stochastic_physics stochastic_physics_repo
         mkdir ${GITHUB_WORKSPACE}/build
         cd ${GITHUB_WORKSPACE}/build
-        export CC=mpicc
-        export CXX=mpicxx
-        export FC=mpif90
         cmake ${GITHUB_WORKSPACE}/fv3atm -DBUILD_CI_TESTING=ON -DFV3=ON ${{ matrix.cmake_opts }} -DENABLE_FV3ATM_DOCS=ON ${{ env.gcov_cmake }}
         make doxygen_doc
 
