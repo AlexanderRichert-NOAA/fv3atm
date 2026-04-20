@@ -58,7 +58,7 @@ jobs:
         spack env create gcc${{ matrix.gcc_ver }} ${GITHUB_WORKSPACE}/fv3atm/ci/spack.yaml
         spack env activate gcc${{ matrix.gcc_ver }}
         spack compiler find | grep gcc@${{ matrix.gcc_ver }}
-        spack external find gmake cmake git git-lfs perl python ${{ matrix.mpi }}
+        spack external find --not-buildable gmake cmake git git-lfs perl python ${{ matrix.mpi }}
         spack config add "packages:all:require:['%gcc@${{ matrix.gcc_ver }}']"
         spack config add "packages:mpi:require:'${{ matrix.mpi }}'"
         spack concretize |& tee ${SPACK_ENV}/log.concretize
